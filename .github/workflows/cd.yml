@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "stagingDeploy" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    - name: Login to Docker Hub
+      uses: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Build the Docker image
+      run: docker build -f ./Dockerfile.staging -t abhindeb2002/node-test:deployTest ./
+    - name: Publish the Docker image to Docker Hub
+      run: docker push abhindeb2002/node-test:deployTest
